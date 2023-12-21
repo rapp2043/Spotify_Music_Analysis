@@ -1,11 +1,54 @@
 install.packages("ggplot2")
 library(ggplot2)
 
-str(data_camp)
-head(data_camp)
-summary(data_camp)
-sum(is.na(data_camp))
-data<-data_camp[!duplicated(data_camp),]
+str(spotify_music)
+head(spotify_music)
+summary(spotify_music)
+sum(is.na(spotify_music))
+data<-spotify_music[!duplicated(spotify_music),]
+#Univariate Analysis Histogram of bpm (Beats Per Minute)
+ggplot(spotify_music, aes(x = bpm)) + 
+  geom_histogram(binwidth = 5, fill = "blue", color = "black") +
+  ggtitle("Distribution of Beats Per Minute (BPM)") +
+  xlab("BPM") +
+  ylab("Frequency")
+
+#Boxplot of pop (Popularity)
+ggplot(spotify_music, aes(y = pop)) + 
+  geom_boxplot (fill = "orange") +
+  ggtitle("Boxplot of Song Popularity") +
+  ylab("Popularity")
+
+
+# Bivariate Analysis Scatter Plot between nrgy (Energy) and dnce (Danceability)
+ggplot(spotify_music, aes(x = nrgy, y = dnce)) + 
+  geom_point(alpha = 0.5, color = "red") +  # Scatter plot points
+  geom_smooth(method = "lm", color = "blue") +  # Add linear regression line
+  ggtitle("Energy vs Danceability with Trend Line") +
+  xlab("Energy") +
+  ylab("Danceability")
+
+# Scatter Plot of val (Valence) vs. pop (Popularity)
+ggplot(spotify_music, aes(x = val, y = pop)) + 
+  geom_point(alpha = 0.5, color = "purple") +
+  ggtitle("Valence vs Popularity") +
+  xlab("Valence") +
+  ylab("Popularity")
+
+# Multivariate Analysis Pair Plot of Selected Variables
+install.packages("GGally")
+library(GGally)
+
+spotify_subset <- spotify_music[, c("bpm", "nrgy", "dnce", "pop")]
+ggpairs(spotify_subset)
+
+# Correlation Matrix of Numerical Variables
+install.packages("corrplot")
+library(corrplot)
+
+numerical_data <- spotify_music[, c("bpm", "nrgy", "dnce", "dB", "live", "val", "dur", "acous", "spch", "pop")]
+cor_matrix <- cor(numerical_data, use = "complete.obs")
+corrplot(cor_matrix, method = "circle") 
 
 # Distribution of the BPM (beats per minute) in the songs
 
